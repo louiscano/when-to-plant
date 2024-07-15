@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   # Routes for Plants
   resources :plants , only: [:index, :show] do
-    resouces :tips , only: [:create]
+    resources :tips , only: [:create]
     resources :neighbours, only: [:create]
   end
 
