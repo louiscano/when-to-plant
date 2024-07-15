@@ -1,0 +1,2 @@
+class PlantListsController < ApplicationController
+end
