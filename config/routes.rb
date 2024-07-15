@@ -1,12 +1,35 @@
 Rails.application.routes.draw do
   devise_for :users
+
+  # Routes for Posts
+  resources :posts do
+    # Nested routes for Comments under Posts
+    resources :comments, only: [:create]
+  end
+
+  # Routes for Comments (outside the nested context if needed)
+  resources :comments, only: [:index, :show,:update, :destroy]
+
+  # Routes for Plants
+  resources :plants , only: [:index, :show] do
+    resources :tips , only: [:create]
+    resources :neighbours, only: [:create]
+  end
+
+  # Routes for Lists
+  resources :lists do
+    # Nested routes for PlantLists under Lists
+    resources :plant_lists, only: [:create]
+  end
+
+  # Routes for Tips
+  resources :tips, except: [:create]
+
+  # Routes for PlantLists (outside the nested context if needed)
+  resources :plant_lists, only: [:index, :show,:update,:destroy]
+
+  # Routes for Neighbours
+  resources :neighbours, only: [:index, :show, :update, :destroy]
   root to: "pages#home"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
