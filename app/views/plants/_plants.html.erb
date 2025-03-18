@@ -1,0 +1,16 @@
+ <h2 class="text-center mt-5 mb-2">Résultats(<%= plants.count %>)</h2>
+ <div class="cards" style="margin-bottom:250px;">
+      <% plants.each do | plant | %>
+        <div class="card rounded-3" style="box-shadow: 0 0 15px rgba(0,0,0,0.2); background-color: #daf1df; border-radius:12px;">
+          <%= cl_image_tag plant.photos.first.key, :cloud_name => "dzhzzutmq", style: 'height: 250px; width: 100%; object-fit: cover; padding: 16px 16px 0 16px;' %>
+          <div class="card-body ">
+            <h5 class="card-title"><%= plant.name %></h5>
+            <h6 class="card-title"><%= plant.categorie %></h6>
+            <p class="card-text text-muted fs-6"><%= plant.description.truncate(75) %></p>
+            <div class="d-flex justify-content-center">
+              <%= link_to "Voir détails", plant_path(plant), class:"btn btn-success text-white rounded-pill" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>

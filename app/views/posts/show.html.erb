@@ -1,0 +1,115 @@
+<div class="container mt-5" style="margin-bottom:200px;">
+  <div class="row">
+  <!-- Colonne pour l'article -->
+  <div class="col-md-12">
+    <div class="card mb-5" style="background-color: #f0fff4;">
+      <div class="card-body">
+        <% if @post.photo.present? && @post.photo.key.present? %>
+          <%= cl_image_tag @post.photo.key, alt: @post.titre, style: "height: 300px; width: 100%; object-fit: cover; border-radius:10px;" %>
+        <% else %>
+          <%= image_tag "default_image.png", alt: @post.titre, style: "height: 300px; width: 100%; object-fit: cover; border-radius:10px;" %>
+        <% end %>
+        <h1 class="card-title mt-1"><%= @post.titre %></h1>
+        <h5 class="card-subtitle mb-2 text-muted"><%= @post.categorie %></h5>
+        <p class="card-text"><small class="text-muted"><%= @post.date_publication %></small></p>
+        <p class="card-text"><%= @post.rich_body %></p>
+
+        <% if current_user&.admin? %>
+          <div class="d-flex justify-content-end mt-5 mb-3">
+            <%= link_to 'Modifier', edit_post_path(@post), class: 'btn btn-primary text-white rounded-pill mr-2 me-3', title: "Modifier" %>
+            <%= link_to 'Supprimer', post_path(@post), data: {
+                        turbo_method: :delete,
+                        turbo_confirm: 'Are you sure?',
+                        controller: "delete-alert",
+                        delete_alert_icon_value: "warning",
+                        delete_alert_title_value: "Êtes vous sur ?",
+                        delete_alert_html_value: "Supprimer.",
+                        delete_alert_confirm_button_text_value: "Oui",
+                        delete_alert_cancel_button_text_value: "Non",
+                        action: "click->delete-alert#confirmDelete",
+                        turbo: false
+                      }, class: 'btn btn-success text-white rounded-pill mr-2 me-3', title: "Supprimer" %>
+          </div>
+        <% end %>
+        <div class="d-flex justify-content-end mt-5 mb-3">
+          <%= link_to 'Retour', posts_path, class: 'btn btn-success text-white rounded-pill me-3' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="row">
+    <!-- Section pour les commentaires -->
+    <div class="col-md-12">
+      <% if @post.comments.present? %>
+        <% @post.comments.each do |comment| %>
+          <div class="card mb-3 p-3" style="background-color: #f0fff4;" id="comment-<%= comment.id %>">
+            <div class="card-body">
+              <div class="comment-content">
+                <div>
+                  <strong>Par <%= comment.user.prenom %> <%= comment.user.nom %> :</strong>
+                </div>
+                <p class="text-decoration-underline fst-italic"><%= comment.titre %></p>
+                <p><%= comment.contenu %></p>
+                <% if comment.user == current_user %>
+                  <div class="d-flex justify-content-end">
+                    <button class="btn btn-success text-white rounded-pill mr-2 edit-comment-btn me-2" data-comment-id="<%= comment.id %>">Modifier</button>
+                    <%= link_to 'Supprimer', comment_path(comment), data: {
+                        turbo_method: :delete,
+                        turbo_confirm: 'Are you sure?',
+                        controller: "delete-alert",
+                        delete_alert_icon_value: "warning",
+                        delete_alert_title_value: "Êtes vous sur ?",
+                        delete_alert_html_value: "Supprimer.",
+                        delete_alert_confirm_button_text_value: "Oui",
+                        delete_alert_cancel_button_text_value: "Non",
+                        action: "click->delete-alert#confirmDelete",
+                        turbo: false
+                      }, class: 'btn btn-success text-white rounded-pill' %>
+                  </div>
+                <% end %>
+              </div>
+              <div class="comment-edit-form d-none">
+                <%= simple_form_for [@post, comment], url: update_comment_post_comment_path(@post, comment), method: :patch, html: { class: 'edit-comment-form' } do |f| %>
+                  <%= f.input :titre, input_html: { value: comment.titre } %>
+                  <%= f.input :contenu, input_html: { value: comment.contenu } %>
+                  <div class="d-flex justify-content-end">
+                    <%= f.submit "Mettre à jour", class: 'btn btn-secondary text-white rounded-pill mx-auto' %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="fst-italic p-3 d-flex flex-column align-items-center justify-content-center rounded mb-3" style="background-color: #f0fff4;">Aucun commentaire pour le moment.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Section pour ajouter un commentaire -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card mb-5 p-3" style="background-color: #f0fff4;">
+        <div class="card-body">
+          <h2>Ajouter un Commentaire</h2>
+          <%= simple_form_for [@post, Comment.new], html: { id: 'new-comment-form', data: { controller: "alert",
+            alert_icon_value: "success",
+            alert_title_value: "Commentaire ajouté avec succès",
+            confirm_button_text: "All good!",
+            confirmButtonColor: "#0c4b36",
+            show_cancel_button: true,
+            action: "submit->alert#initSweetalert" } } do |f| %>
+            <%= f.input :titre, label: false, placeholder: "Entrez le titre ici" %>
+            <%= f.input :contenu, label: false, placeholder: "Entrez le contenu ici" %>
+            <div class="d-flex justify-content-end">
+              <%= f.submit "Soumettre", class: 'btn btn-success text-white rounded-pill' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

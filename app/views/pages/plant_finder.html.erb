@@ -1,0 +1,170 @@
+<div class="w-75 m-auto" style="padding-bottom:200px;">
+<h1 class="text-center pt-3">Trouvez votre plante !</h1>
+<p class="text-center">Trouvez la ou les plantes qu'il vous faut, pour votre terrain et votre niveau de jardinage</p>
+<%= form_with(url: plants_path, method: :get, class: "d-flex flex-column", data: {controller: "filter", turbo_frame: "_top"}) do |f|%>
+  <h2 class="text-center mt-5 mb-3">Quel type de plantes ?</h2>
+<div class="d-flex justify-content-center w-50 m-auto flex-wrap">
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.freepik.com/512/7910/7910224.png" alt="Fruits" style="max-width:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :categorie,
+                    "Fruits",
+                    class:"me-2" %>
+              <%= label_tag "Fruits" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.freepik.com/512/7910/7910612.png?ga=GA1.1.692665051.1720597619" alt="Fruits" style="max-width:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :categorie,
+                    "Légumes",
+                    class:"me-2" %>
+              <%= label_tag "Légumes" %>
+            </div>
+        </div>
+       <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.freepik.com/512/8809/8809458.png?ga=GA1.1.692665051.1720597619" alt="Aromates" style="max-width:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :categorie,
+                    "Aromates",
+                    class:"me-2" %>
+              <%= label_tag "Aromates" %>
+            </div>
+        </div>
+</div>
+
+  <h2 class="text-center mt-5 mb-3">Quel jardinier je suis ?</h2>
+<div class="d-flex justify-content-center flex-wrap">
+   <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/5769/5769492.png" alt="Jardinier débutant" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :difficulte,
+                    "Facile",
+                    class:"me-2" %>
+              <%= label_tag "Jardinier débutant" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/8411/8411112.png" alt="Jardinier amateur" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :difficulte,
+                    "Moyen",
+                    class:"me-2" %>
+              <%= label_tag "Jardinier amateur" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/5346/5346481.png" alt="Jardinier expérimenté" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :difficulte,
+                    "Fort",
+                    class:"me-2" %>
+              <%= label_tag "Jardinier expérimenté" %>
+            </div>
+        </div>
+</div>
+  <h2 class="text-center mt-5 mb-3">Quand est-ce que je veux planter ?  <img src="https://cdn-icons-png.flaticon.com/512/4769/4769691.png" width="40px" height="40px" class="mb-2 ms-2"></h2>
+    <div class="d-flex m-auto flex-wrap justify-content-center">
+      <% ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"].each do |month| %>
+          <div class="tag-item">
+            <%= radio_button_tag :periode_semis,
+                month,
+                false, {id: "periode_semis_#{month.parameterize}",
+                class:"tag-selector"} %>
+            <%= label_tag "periode_semis_#{month.parameterize}", month %>
+        </div>
+      <% end %>
+    </div>
+  <h2 class="text-center mt-5 mb-3">Quelle est mon exposition ?</h2>
+  <div class="d-flex justify-content-center flex-wrap">
+   <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="Plein soleil" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :exposition,
+                    "Plein soleil",
+                    class:"me-2" %>
+              <%= label_tag "Plein soleil" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/9586/9586736.png" alt="Mi-ombragée" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :exposition,
+                    "Mi-ombragée",
+                    class:"me-2" %>
+              <%= label_tag "Mi-ombragée" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" alt="Ombragée" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :exposition,
+                    "Ombragée",
+                    class:"me-2" %>
+              <%= label_tag "Ombragée" %>
+            </div>
+        </div>
+</div>
+
+  <h2 class="text-center mt-5 mb-3">Quelles sont les températures moyennes ?  <img src="https://cdn-icons-png.flaticon.com/512/1684/1684375.png" width="40px" height="40px"></h2>
+  <div class="d-flex m-auto flex-wrap justify-content-center">
+        <% ['-10-35°C', '-5°C-20°C', '0-20°C', '10°C', '10-15°C', '10-25°C', '10-30°C', '15°C', '15-20°C', '15-25°C', '15-30°C', '20°C', '20-25°C', '20-30°C', '25-35°C'].each do |temp| %>
+          <div class="tag-item">
+            <%= radio_button_tag :temperature,
+                temp,
+                false, {id: "temperature_#{temp.parameterize}",
+                class:"tag-selector"} %>
+            <%= label_tag "temperature_#{temp.parameterize}", temp %>
+        </div>
+      <% end %>
+    </div>
+  <h2 class="text-center mt-5 mb-3">Quelle est la nature du sol ?  <img src="https://cdn-icons-png.flaticon.com/512/7515/7515003.png" width="40px" height="40px" class="mb-2"></h2>
+  <div class="d-flex m-auto flex-wrap justify-content-center">
+        <% ['Tout types', 'Drainé', 'Acide', 'Ameubli', 'Riche en humus', 'Argileux', 'Léger', 'Profond', 'Riche', 'Neutre', 'Moyen', 'Frais', 'Humifère', 'Sableuse', 'Calcaire'].each do |natsol| %>
+          <div class="tag-item">
+            <%= radio_button_tag :nature_sol,
+                natsol,
+                false, {id: "nature_sol_#{natsol.parameterize}",
+                class:"tag-selector"} %>
+            <%= label_tag "nature_sol_#{natsol.parameterize}", natsol %>
+        </div>
+      <% end %>
+    </div>
+
+  <h2 class="text-center mt-5 mb-3">Besoin d’arrosage</h2>
+    <div class="d-flex justify-content-center flex-wrap">
+   <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/15200/15200487.png" alt="Faible" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :besoin_eau,
+                    "Faible",
+                    class:"me-2" %>
+              <%= label_tag "Faible (tous les 3-5 jours)" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/16775/16775777.png" alt="Moyen" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :besoin_eau,
+                    "Moyen",
+                    class:"me-2" %>
+              <%= label_tag "Moyen (tous les 2-3 jours)" %>
+            </div>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center mx-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/15439/15439860.png" alt="Fort" style="max-height:100px;" class="mb-3">
+            <div>
+              <%= radio_button_tag :besoin_eau,
+                    "Fort",
+                    class:"me-2" %>
+              <%= label_tag "Fort (tous les jours)" %>
+            </div>
+        </div>
+</div>
+
+  <div class="my-5 m-auto btn-plant-finder" style="max-width: 210px;">
+      <%= button_to "Trouver des plantes !", class:"", style:"", data: {action: "click->filter#submit"} %>
+  </div>
+  <% end %>
+
+</div>

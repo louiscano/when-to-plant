@@ -1,0 +1,27 @@
+<%= simple_form_for(post) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.input :titre %>
+  </div>
+
+  <div class="form-inputs">
+    <%= f.input :categorie %>
+  </div>
+
+  <div class="form-inputs">
+    <%= f.input :date_publication, as: :date, html5: true %>
+  </div>
+
+  <div class="form-inputs mb-3">
+    <label class="form-label">Contenu</label>
+    <%= f.rich_text_area :rich_body, class:" trix-content" %>
+  </div>
+
+  <div class="w-50">
+  <%= f.input :photo, as: :file %>
+  </div>
+
+  <div class="form-actions d-flex justify-content-center">
+    <%= f.button :submit, "Publier", class:"btn btn-success rounded-pill" %>
+  </div>
+<% end %>

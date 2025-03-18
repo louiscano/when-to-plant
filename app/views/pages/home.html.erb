@@ -1,2 +1,102 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+
+  <div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url(https://conseils-jardin.willemsefrance.fr/wp-content/uploads/2017/02/Potager-bio-1920x576.jpg);">
+    <div class="container">
+      <h1 style="text-align: center;">When To Plant 🌱</h1>
+      <h3 style="text-align: center;">L'art de planter</h3>
+      <p>
+        Bienvenue dans le potager de When To Plant !<br>
+        Retrouvez tous les conseils et astuces pour faire votre potager avec plus de 150 variétés différentes de légumes, fruits, aromates et condiments.<br>
+        Profitez des astuces de nombreux jardiniers et faites pousser vos propres plantes grâce aux informations et au calendrier When To Plant !
+      </p>
+    </div>
+  </div>
+<div class="d-flex flex-column m-auto mb-5" style="width:80%">
+  <h1 class="py-4 text-center">Les plantes du moment</h1>
+
+  <div class="cards mb-3">
+   <% @plants.each do |plant| %>
+    <div class="card-trip">
+      <div class="card-trip-infos">
+        <%= cl_image_tag plant.photos.first.key %>
+        <div class="cards-title">
+          <h2><%= plant.name %></h2>
+          <p>
+            <%= plant.categorie%>
+          </p>
+          <p>
+            <%= plant.description.truncate(85, separator: ' ') %>
+          </p>
+        </div>
+      </div>
+      <div class="card-btn">
+        <%= link_to "Voir plus de détails", plant_path(plant), class: "btn btn-ghost rounded-pill" %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+  <%= link_to "Voir toutes les plantes", "/plants", class: "btn btn-success rounded-pill m-auto my-3" %>
+
+  <h1 class="py-4 text-center">Le calendrier</h1>
+
+  <div class="cards mb-3">
+    <div class="card-trip d-flex flex-column align-items-center justify-content-center" style="max-height:300px;">
+          <h2 class="fs-3 pb-3">Jeudi 25 Juillet</h2>
+          <p class="fs-5 pb-3">Hier</p>
+      <div class="d-flex p-3 bg-warning" style="border-radius:10px;">
+      <img src="https://www.jardiner-malin.fr/wp-content/themes/jm24/assets/img/picto/cl-feuilles.png" title="Jour feuilles" width="35" height="40" class="mx-3"/>
+      <img src="https://www.jardiner-malin.fr/wp-content/themes/jm24/assets/img/picto/cl-lunemontante.png" title="Lune montante" width="35" height="40" class="mx-3"/>
+      </div>
+    </div>
+
+
+    <div class="card-trip d-flex flex-column align-items-center justify-content-center" style="max-height:300px;">
+          <h2 class="fs-3 pb-3">Vendredi 26 Juillet</h2>
+          <p class="fs-5 pb-3">Aujourd'hui</p>
+    <div class="d-flex p-3 bg-warning" style="border-radius:10px;">
+      <img src="https://www.jardiner-malin.fr/wp-content/themes/jm24/assets/img/picto/cl-feuilles.png" title="Jour feuilles" width="35" height="40" class="mx-3"/>
+      <img src="https://www.jardiner-malin.fr/wp-content/themes/jm24/assets/img/picto/cl-lunemontante.png" title="Lune montante" width="35" height="40" class="mx-3"/>
+    </div>
+    </div>
+
+
+    <div class="card-trip d-flex flex-column align-items-center justify-content-center" style="max-height:300px;">
+          <h2 class="fs-3 pb-3">Samedi 27 Juillet</h2>
+          <p class="fs-5 pb-3">Demain</p>
+      <div class="d-flex p-3 bg-warning" style="border-radius:10px;">
+      <img src="https://www.jardiner-malin.fr/wp-content/themes/jm24/assets/img/picto/cl-feuilles.png" title="Jour feuilles" width="35" height="40" class="mx-3"/>
+      <img src="https://www.jardiner-malin.fr/wp-content/themes/jm24/assets/img/picto/cl-lunemontante.png" title="Lune montante" width="35" height="40" class="mx-3"/>
+    </div>
+    </div>
+  </div>
+  <%= link_to "Voir le calendrier", "/calendrier##{Date.today.day}", class: "btn btn-success rounded-pill m-auto my-3" %>
+
+  <h1 class="py-4 text-center">Les dernières informations et tuto When To Plant</h1>
+
+<div style="margin-bottom:200px;">
+  <div class="d-flex gap-3 justify-content-center flex-lg-nowrap flex-wrap">
+    <% @posts.each do |post| %>
+      <div class="mb-4">
+        <div class="card rounded-3" style="background-color: #daf1df; box-shadow: 0 0 15px rgba(0,0,0,0.2);">
+          <% if post.photo.present? && post.photo.key.present? %>
+            <%= cl_image_tag post.photo.key, cloud_name: "dzhzzutmq", style: "height: 250px; width: 100%; object-fit: cover; padding: 16px 16px 0 16px;" %>
+          <% else %>
+            <%= image_tag "default_image.png", style: "height: 250px; width: 100%; object-fit: cover; padding: 16px 16px 0 16px;" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= post.titre %></h5>
+            <p class="card-text text-muted"><%= post.rich_body.to_plain_text.truncate(200) %></p>
+            <div class="d-flex flex-row align-items-center justify-content-between">
+              <p class="card-text"><small class="text-muted"><%= post.date_publication %></small></p>
+              <%= link_to "Lire l'article", post_path(post), class: "btn btn-success rounded-pill" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    </div>
+    <div class="m-auto" style="max-width:200px;">
+      <%= link_to "Voir tout les articles", posts_path, class: "btn btn-success rounded-pill m-auto mb-3" %>
+    </div>
+  </div>
+
+</div>

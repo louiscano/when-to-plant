@@ -1,0 +1,62 @@
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(https://st.hzcdn.com/simgs/pictures/jardins/bac-pour-jardins-cote-jardin-et-clotures-img~8161e8c40659c718_14-1284-1-8ca4e4f.jpg); padding-bottom: 64px; background-size: cover; background-position: center">
+  <div class="container">
+    <h1 style="text-align: center;">When To Plant 🌱</h1>
+    <h3 style="text-align: center;">Le Blog</h3>
+    <p>
+      Découvrez notre blog spécialisé sur les fruits, légumes et aromates,
+      offrant une mine d'informations sur leur culture, leurs bienfaits et des conseils précieux pour réussir votre jardin potager à chaque saison."
+    </p>
+  </div>
+</div>
+
+<div class="container mb-5 pb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <h2 class="mb-4 mt-1 text-center">Articles récents</h2>
+
+      <!-- Search Bar -->
+      <div class="mb-4">
+        <div class="container mt-4 py-3" style="background-color: #DAF1DF; border-radius:10px;">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+              <%= form_with url: posts_path, method: :get, class: "d-flex w-100" do %>
+                <%= text_field_tag :query,
+                  params[:query],
+                  class: "form-control flex-grow-1 me-2 rounded-pill",
+                  placeholder: "Recherche un article" %>
+                <%= submit_tag "Rechercher", class: "btn btn-success text-white rounded-pill" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Articles show -->
+      <div id="articles">
+        <% @posts.each_slice(2).with_index do |post_pair, row_index| %>
+          <div class="row justify-content-between mb-3 <%= 'mb-5' if row_index == @posts.each_slice(2).count - 1 %>">
+            <% post_pair.each do |post| %>
+              <div class="col-12 col-md-5 mb-3">
+                <div class="card article-card mb-5" style="background-color: #f0fff4; width: 100%;">
+                  <div class="card-body">
+                    <% if post.photo.present? && post.photo.key.present? %>
+                      <%= cl_image_tag post.photo.key, alt: post.titre, style: "height: 200px; width: 100%; object-fit: cover; border-radius:10px;" %>
+                    <% else %>
+                      <%= image_tag "default_image.png", style: "height: 250px; width: 100%; object-fit: cover; padding: 16px 16px 0 16px;" %>
+                    <% end %>
+                    <h3 class="card-title"><%= post.titre %></h3>
+                    <h5 class="card-subtitle mb-2 text-muted"><%= post.categorie %></h5>
+                    <p class="card-text"><%= post.rich_body.to_plain_text.truncate(200) %></p>
+                    <div class="d-flex justify-content-end">
+                      <%= link_to "Lire l'article", post_path(post), class: 'btn btn-success text-white rounded-pill', style: 'background-color: #0C4B36;' %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %> <!-- Fermer le bloc each_slice -->
+      </div> <!-- Fermer la div #articles -->
+    </div>
+  </div>
+</div>

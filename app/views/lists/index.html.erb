@@ -1,0 +1,75 @@
+<div class="w-75 d-flex flex-column m-auto" style="margin-bottom:250px!important;">
+  <h1 class="text-center my-4">Mes listes</h1>
+  <div>
+  </div>
+  <div data-controller="reveal edit-list" data-reveal-hidden-class="d-none">
+    <% @lists.each do |list| %>
+      <div class="d-flex justify-content-end">
+        <p class='btn btn-success text-white ms-2 rounded-pill me-2 mb-3' data-action="click->edit-list#toggle">
+          <i class="fa-solid fa-pen"></i>
+        </p>
+        <%= link_to list_path(list), data: {
+          turbo_method: :delete,
+          turbo_confirm: 'Are you sure?',
+          controller: "delete-alert",
+          delete_alert_icon_value: "warning",
+          delete_alert_title_value: "Êtes vous sur ?",
+          delete_alert_html_value: "Supprimer.",
+          delete_alert_confirm_button_text_value: "Oui",
+          delete_alert_cancel_button_text_value: "Non",
+          action: "click->delete-alert#confirmDelete",
+          turbo: false
+        }, class: 'btn btn-success text-white ms-2 rounded-pill me-2 mb-3' do %>
+          <i class="fa-solid fa-trash"></i>
+        <% end %>
+      </div>
+      <div class="d-flex justify-content-between border px-5 py-3 rounded align-items-center bg-success mb-3" style="max-height: 71px;" data-action="click->reveal#toggle" >
+        <h3 class="text-white d-flex align-items-center m-0" style="max-height: 100%; line-height: 71px;">
+          <span><%= list.nom %></span>
+          <div class="tip-edit-form d-none ms-3 rounded" data-edit-list-target="form" style="max-height: 71px; padding: 0;" >
+            <%= simple_form_for list, method: :patch, html: { class: 'edit-tip-form d-flex align-items-center mb-0' } do |f| %>
+              <%= f.input :nom, input_html: { value: list.nom }, label: false, wrapper_html: { class: 'align-items-center justify-content-center mt-3' } %>
+              <%= f.submit "Mettre à jour", class: 'btn btn-secondary text-white rounded-pill ms-2' %>
+            <% end %>
+          </div>
+        </h3>
+        <i class="fa-solid fa-caret-down" style="color: #ffffff;"></i>
+      </div>
+      <div class="cards mt-3 d-none" data-reveal-target="item">
+      <% list.plant_lists.each do |plant_list| %>
+          <div class="card rounded-3" style="box-shadow: 0 0 15px rgba(0,0,0,0.2); background-color: #daf1df; border-radius:12px;">
+            <%= cl_image_tag plant_list.plant.photos.first.key, :cloud_name => "dzhzzutmq", style: 'height: 250px; width: 100%; object-fit: cover; padding: 16px 16px 0 16px;' %>
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= plant_list.plant.name %>
+              </h5>
+              <h6 class="card-title">
+                <%= plant_list.plant.categorie %>
+              </h6>
+              <p class="card-text text-muted fs-6">
+                <%= plant_list.plant.description.truncate(75) %>
+              </p>
+              <div class="d-flex justify-content-center">
+                <%= link_to "Voir détails", plant_path(plant_list.plant), class: "btn btn-success text-white rounded-pill me-3" %>
+                <%= link_to plant_list_path(plant_list), data: {
+                    turbo_method: :delete,
+                    turbo_confirm: 'Are you sure?',
+                    controller: "delete-alert",
+                    delete_alert_icon_value: "warning",
+                    delete_alert_title_value: "Êtes vous sur ?",
+                    delete_alert_html_value: "Supprimer.",
+                    delete_alert_confirm_button_text_value: "Oui",
+                    delete_alert_cancel_button_text_value: "Non",
+                    action: "click->delete-alert#confirmDelete",
+                    turbo: false
+                  }, class: "btn btn-success text-white rounded-pill" do %>
+                  <i class="fa fa-trash"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

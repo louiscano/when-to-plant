@@ -6,7 +6,21 @@
 // External libraries
 @import "bootstrap";
 @import "font-awesome";
-
+// @import "sweetalert2-rails";
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
+
+html {
+  position: relative;
+  min-height: 100vh;
+}
+
+body {
+  min-height: 100%;
+  padding-bottom: 250px;
+}
+
+* {
+  font-family: 'Poppins', sans-serif;
+  }

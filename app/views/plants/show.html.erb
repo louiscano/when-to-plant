@@ -1,0 +1,251 @@
+<div class="mx-auto" style="max-width: 1200px; width:80%;">
+  <div class="mt-2">
+    <%= link_to "< Retour", plants_path, class: "text-decoration-none text-black mb-3" %>
+  </div>
+  <%= turbo_page_requires_reload %>
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="left-part">
+      <h2><%= @plant.name %></h2>
+      <p><%= @plant.categorie %></p>
+    </div>
+
+    <div class="btn-group rounded h-25">
+      <button class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">
+        Ajouter à ma liste
+      </button>
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center" id="exampleModalLabel">Mes listes</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <% if user_signed_in? %>
+              <div class="modal-body">
+                <div class="d-flex flex-column p-2">
+                  <% @lists.each do |list| %>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <%= link_to list.nom, lists_url %>
+                      <%= button_to "+", list_plant_lists_url(plant_id: @plant.id, list_id: list.id), class: "fs-2 text-success border-0 bg-transparent text-decoration-none" %>
+                    </div>
+                  <% end %>
+                </div>
+
+                <h4 class="text-center">Créer une liste</h4>
+                <%= simple_form_for @list do |f| %>
+                  <div class="mb-3">
+                    <%= f.label :nom %>
+                    <%= f.hidden_field :plant, value: @plant.id %>
+                    <%= f.text_field :nom, class: "form-control" %>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <%= f.button :submit, "Créer", class: "mb-2 text-decoration-none btn btn-success rounded-pill" %>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="d-flex justify-content-center align-items-center flex-column py-5">
+                <p>Connectez-vous pour ajouter ou créer votre liste</p>
+                <button class="btn btn-primary rounded-pill">
+                  <a class="text-decoration-none text-white" href="/users/sign_in">Se connecter</a>
+                </button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <%= cl_image_tag @plant.photos.first.key, cloud_name: "dzhzzutmq", class: "w-100 rounded-3 mb-3 m-1 object-fit-cover d-block" %>
+      </div>
+      <% if @plant.photos.second.present? %>
+        <div class="carousel-item">
+          <%= cl_image_tag @plant.photos.second.key, cloud_name: "dzhzzutmq", class: "w-100 rounded-3 mb-3 m-1 object-fit-cover d-block" %>
+        </div>
+      <% end %>
+      <% if @plant.photos.third.present? %>
+        <div class="carousel-item">
+            <%= cl_image_tag @plant.photos.third.key, cloud_name: "dzhzzutmq", class: "w-100 rounded-3 mb-3 m-1 object-fit-cover d-block" %>
+        </div>
+      <% end %>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <div data-controller="tabs" data-tabs-active-class="bg-warning" data-tabs-default-tab-value="tab1" class="mt-3">
+    <div class="flex">
+      <button id="tab1" data-tabs-target="btn" data-action="click->tabs#select" class="border-0 rounded-top p-2">Description</button>
+      <button id="tab2" data-tabs-target="btn" data-action="click->tabs#select" class="border-0 rounded-top p-2">Détails</button>
+      <button id="tab3" data-tabs-target="btn" data-action="click->tabs#select" class="border-0 rounded-top p-2">Maladies</button>
+    </div>
+    <div data-tabs-target="tab" id="tab1">
+      <div class="card mb-3 bg-warning border-0" style="height: auto;">
+        <div class="card-body mb-3">
+          <div class="lh-sm">
+            <p>
+              <strong>Nom scientifique:</strong> <%= @plant.nom_scientifique %> <br>
+              <i class="fa-brands fa-pagelines me-3" title="Famille" style="width: 20px; text-align: center;"></i><%= @plant.famille %> <br>
+              <i class="fa-solid fa-star-half-stroke me-3" title="Difficulté" style="width: 20px; text-align: center;"></i><%= @plant.difficulte %>
+            </p>
+          </div>
+          <p><%= @plant.description %></p>
+          <p><strong>Conseils de semis:</strong> <%= @plant.conseil_semis %></p>
+          <p><strong>Conseils de culture:</strong> <%= @plant.conseil_culture %></p>
+        </div>
+      </div>
+    </div>
+    <div data-tabs-target="tab" id="tab2">
+      <div class="card mb-3 bg-warning border-0" style="height: 400px;">
+        <div class="card-body mb-3 lh-base">
+          <p>
+            <i class="fa-solid fa-seedling me-3" title="Types de semis" style="width: 20px; text-align: center;"></i><%= @plant.type_semis %><br>
+            <i class="fa-regular fa-calendar-plus me-3" title="Periode de semis" style="width: 20px; text-align: center;"></i><%= @plant.periode_semis %><br>
+            <i class="fa-regular fa-calendar-check me-3" title="Récoltes" style="width: 20px; text-align: center;"></i><%= @plant.periode_recoltes %><br>
+            <i class="fa-solid fa-cloud-sun me-3" title="Exposition" style="width: 20px; text-align: center;"></i><%= @plant.exposition %><br>
+            <i class="fa-solid fa-droplet me-3" title="Besoin en eau" style="width: 20px; text-align: center;"></i><%= @plant.besoin_eau %><br>
+            <i class="fa-solid fa-arrow-up me-3" title="Hauteur" style="width: 20px; text-align: center;"></i><%= @plant.hauteur %> <br>
+            <i class="fa-solid fa-arrows-left-right me-3" title="Ecart entre les plantes" style="width: 20px; text-align: center;"></i><%= @plant.ecart_rang %><br>
+            <i class="fa-solid fa-temperature-low me-3" title="Température" style="width: 20px; text-align: center;"></i><%= @plant.temperature %><br>
+            <strong>Culture:</strong> <%= @plant.culture %><br>
+            <strong>Nature du sol:</strong> <%= @plant.nature_sol %><br>
+            <strong>Qualité du sol:</strong> <%= @plant.qualite_sol %><br>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div data-tabs-target="tab" id="tab3">
+      <div class="card mb-3 bg-warning border-0" style="height: 300px;">
+        <div class="card-body mb-3">
+          <p><strong>Maladies:</strong> <%= @plant.maladie %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="test-1" data-edit-tip-target="messages" >
+    <h5 class="d-flex flex-row">
+      <i class="fa-regular fa-pen-to-square"></i>
+      <span class="text-decoration-underline ms-2">Conseils des jardiniers :</span>
+    </h5>
+    <div class="row">
+  <!-- Section pour les conseils -->
+      <div class="col-md-12">
+        <% if @plant.tips.present? %>
+          <% @plant.tips.each do |tip| %>
+            <div class="card mb-3 p-3" style="background-color: #f0fff4;" id="tip-<%= tip.id %>">
+              <div class="card-body">
+                <div class="tip-content" data-controller="edit-tip">
+                  <div>
+                    <strong>Par <%= tip.user.prenom %> <%= tip.user.nom %> :</strong>
+                  </div>
+                  <p class="text-decoration-underline fst-italic"><%= tip.titre %></p>
+                  <p><%= tip.contenu %></p>
+                  <% if tip.user == current_user %>
+
+                    <div class="d-flex justify-content-end">
+                      <%= link_to  edit_tip_plant_tip_path(plant_id: @plant, tip: tip),  data: {action: "click->edit-tip#toggle"}, class: 'btn btn-success text-white rounded-pill me-2 edit-tip-btn', title: "Modifier" do %>
+                        <i class="fa-solid fa-pen"></i>
+                      <% end %>
+                      <%= link_to tip_path(tip), data: {
+                        turbo_method: :delete,
+                        turbo_confirm: 'Are you sure?',
+                        controller: "delete-alert",
+                        delete_alert_icon_value: "warning",
+                        delete_alert_title_value: "Êtes vous sur ?",
+                        delete_alert_html_value: "Supprimer.",
+                        delete_alert_confirm_button_text_value: "Oui",
+                        delete_alert_cancel_button_text_value: "Non",
+                        action: "click->delete-alert#confirmDelete",
+                        turbo: false
+                      }, class: 'btn btn-success text-white rounded-pill', title: "Supprimer" do %>
+                        <i class="fa-solid fa-trash"></i>
+                        <% end %>
+                      </div>
+                    <div class="tip-edit-form d-none" data-edit-tip-target="form">
+                      <%= simple_form_for [@plant, tip], url: update_tip_plant_tip_path(plant_id: @plant, tip_id: tip, id:tip.id), method: :patch,  html: { class: 'edit-tip-form' } do |f| %>
+                        <%= f.input :titre, input_html: { value: tip.titre } %>
+                        <%= f.input :contenu, input_html: { value: tip.contenu } %>
+                        <div class="d-flex justify-content-end">
+                          <%= f.submit "Mettre à jour", class: 'btn btn-secondary text-white rounded-pill mx-auto' %>
+                        </div>
+                    <% end %>
+                </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="fst-italic p-3 d-flex flex-column align-items-center justify-content-center rounded mb-3" style="background-color: #f0fff4;">Aucun conseil pour le moment.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+
+  <% if user_signed_in? %>
+  <div class="card p-3 m-auto mb-5" style="background-color: #f0fff4;">
+    <h4 class="text-center">Ajouter votre conseil</h4>
+    <%= simple_form_for([@plant, @tip],   html: { id: 'new-comment-form', label: false, data: { controller: "alert",
+      alert_icon_value: "success",
+      alert_title_value: "Astuce ajouté avec succès",
+      confirm_button_text: "All good!",
+      confirmButtonColor: "#0c4b36",
+      show_cancel_button: true,
+      action: "submit->alert#initSweetalert",
+      turbo: false }}) do |f| %>
+      <%= f.input :titre, label: false, placeholder: "Entrez le titre ici" %>
+      <%= f.input :contenu, label: false, placeholder: "Entrez le contenu ici" %>
+      <div class="d-flex justify-content-end">
+        <%= f.submit "Publier", class: "btn btn-success text-white w-25 rounded-pill" %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="p-3 d-flex flex-column align-items-center justify-content-center rounded mb-5" style="background-color: #daf1df;">
+    <p>Connectez-vous pour ajouter vos conseils !</p>
+    <button class="btn btn-primary rounded-pill">
+      <a class="text-decoration-none text-white " href="/users/sign_in">Se connecter</a>
+    </button>
+  </div>
+<% end %>
+
+
+  <div class="mb-5 bg-success p-3 text-white rounded">
+    <h3 class="text-center">Bon voisins</h3>
+  </div>
+
+  <div class="cards mt-3" style="margin-bottom:300px;">
+    <% @bon_voisin.each do |bon_voisin| %>
+      <div class="card rounded-3" style="box-shadow: 0 0 15px rgba(0,0,0,0.2); background-color: #daf1df; border-radius: 12px;">
+        <%= cl_image_tag bon_voisin.plant_2.photos.first.key, cloud_name: "dzhzzutmq", style: 'height: 250px; width: 100%; object-fit: cover; padding: 16px 16px 0 16px;' %>
+        <div class="card-body">
+          <h5 class="card-title"><%= bon_voisin.plant_2.name %></h5>
+          <h6 class="card-title"><%= bon_voisin.plant_2.categorie %></h6>
+          <p class="card-text text-muted fs-6"><%= bon_voisin.plant_2.description.truncate(65) %></p>
+          <div class="d-flex justify-content-center">
+            <%= link_to "Voir détails", plant_path(bon_voisin.plant_2), class: "btn btn-success text-white rounded-pill" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

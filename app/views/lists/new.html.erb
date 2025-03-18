@@ -1,0 +1,10 @@
+<div class="">
+  <h1>Nouvelle liste</h1>
+    <%= simple_form_for @list do |f| %>
+        <div class="mb-2">
+          <%= f.label :nom %>
+          <%= f.text_field :nom, class:"form-control"%>
+        </div>
+        <%= f.submit class:"text-decoration-none btn btn-success"%>
+    <% end %>
+  </div>
